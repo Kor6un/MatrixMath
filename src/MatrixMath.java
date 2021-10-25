@@ -12,7 +12,6 @@ public class MatrixMath {
 
     public static void main(String[] args) {
 
-
         getResult();
 
      /*   int[][] a = getArrayFromFile(pathMatrixA);
@@ -28,7 +27,6 @@ public class MatrixMath {
         display(result);
         writeMatrixToFile(result, outputPath);
 */
-
     }
 
     public static int choiceMenu() {
@@ -55,12 +53,13 @@ public class MatrixMath {
     }
 
     public static void getResult() {
-        int choiceMenu = choiceMenu();
+        int inputMenu = choiceMenu();
+        int[][] result;
         int size;
         int[][] a;
         int[][] b;
-       // int[][] result;
-        if (choiceMenu == 1) {
+
+        if (inputMenu == 1) {
             size = getSizeFromCons();
             System.out.println("Введите элементы матрицы a:");
             a = getMatrixFromCons(size);
@@ -75,12 +74,24 @@ public class MatrixMath {
 
         if (choiceOperation() == 2) {
             System.out.println("Результат вычитания:");
-            display(substract(a, b));
+            result = substract(a, b);
         } else {
             System.out.println("Результат сложения:");
-            display(add(b, a));
+            result = add(b, a);
         }
+
+        output(result);
+
         //return result;
+    }
+
+    private static void output(int[][] result) {
+        int outputMenu = choiceMenu();
+        if (outputMenu == 1) {
+            display(result);
+        } else {
+            writeMatrixToFile(result, outputPath);
+        }
     }
 
     private static String getPath() {
@@ -134,7 +145,6 @@ public class MatrixMath {
             }
         }
         System.out.println();
-
         return result;
     }
 
