@@ -6,27 +6,20 @@ import java.util.Scanner;
 
 public class MatrixMath {
     static Scanner scanner = new Scanner(System.in);
+
+    /*
     static String pathMatrixA = "src\\matrix_a.txt";
     static String pathMatrixB = "src\\matrix_b.txt";
     static String outputPath = "src\\result.txt";
+    */
 
     public static void main(String[] args) {
 
-        getResult();
+        int[][] result = getResult();
 
-     /*   int[][] a = getArrayFromFile(pathMatrixA);
-        System.out.println("Исходная матрица a:");
-        display(a);
+        output(result);
 
-        int[][] b = getArrayFromFile(pathMatrixB);
-        System.out.println("Исходная матрица b:");
-        display(b);
-
-        int[][] result = getResult(a, b);
-
-        display(result);
-        writeMatrixToFile(result, outputPath);
-*/
+        scanner.close();
     }
 
     public static int choiceMenu() {
@@ -52,7 +45,7 @@ public class MatrixMath {
         return choice;
     }
 
-    public static void getResult() {
+    public static int[][] getResult() {
         int inputMenu = choiceMenu();
         int[][] result;
         int size;
@@ -79,10 +72,7 @@ public class MatrixMath {
             System.out.println("Результат сложения:");
             result = add(b, a);
         }
-
-        output(result);
-
-        //return result;
+        return result;
     }
 
     private static void output(int[][] result) {
@@ -90,8 +80,26 @@ public class MatrixMath {
         if (outputMenu == 1) {
             display(result);
         } else {
+            String outputPath = getOutputPath();
             writeMatrixToFile(result, outputPath);
         }
+    }
+
+    private static String getOutputPath() {
+        boolean isIncorrect;
+        String path;
+        do {
+            System.out.print("Введите ссылку на файл: ");
+            isIncorrect = false;
+            path = scanner.nextLine();
+            try {
+                File file = new File(path);
+            } catch (Exception e) {
+                System.out.println();
+                isIncorrect = true;
+            }
+        } while (isIncorrect);
+        return path;
     }
 
     private static String getPath() {
@@ -141,7 +149,7 @@ public class MatrixMath {
                         System.out.println("Ошибка ввода. Повторите ввод.");
                     }
 
-                } while (size*size == elements-1);
+                } while (size*size < elements);
             }
         }
         System.out.println();
@@ -149,20 +157,24 @@ public class MatrixMath {
     }
 
     private static int getSizeFromCons() {
-        int size = 0;
         final int MAX = 4;
         final int MIN = 1;
+        int size = 0;
+        boolean isCorrect;
         do {
             System.out.print("Введите размерность матрицы NxN (от 1 до 4): ");
             try {
                 size = Integer.parseInt(scanner.nextLine());
+                isCorrect = true;
             } catch (Exception e) {
                 System.out.println("Ошибка ввода. Повторите ввод.");
+                isCorrect = false;
             }
-            if (size > MAX || size < MIN) {
+            if ((isCorrect) && (size > MAX || size < MIN)) {
                 System.out.println("Число выходит за допустимые пределы. Повторите ввод.");
+                isCorrect = false;
             }
-        } while (size < MIN || size > MAX);
+        } while (!isCorrect);
         return size;
     }
 
@@ -192,7 +204,6 @@ public class MatrixMath {
     }
 
     public static int choiceOperation() {
-        Scanner scanner = new Scanner(System.in);
         final int MAX = 2;
         final int MIN = 1;
         int choice = 0;
@@ -207,7 +218,6 @@ public class MatrixMath {
                 System.out.println("Число выходит за допустимые пределы. Повторите ввод.");
             }
         } while (choice < MIN || choice > MAX);
-        scanner.close();
         return choice;
     }
 
